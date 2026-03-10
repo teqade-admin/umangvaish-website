@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button"
 import { Menu, ChevronLeft, ChevronRight, Play } from "lucide-react"
 import { EmailModal } from "@/components/email-modal"
+import { withBasePath } from "@/lib/base-path"
 
 export default function Home() {
   return (
@@ -33,7 +34,7 @@ export default function Home() {
 
             {/* Center Logo */}
             <div className="flex justify-center">
-              <a href="/" className="text-3xl md:text-4xl font-light tracking-[0.3em] text-foreground">
+              <a href={withBasePath("/")} className="text-3xl md:text-4xl font-light tracking-[0.3em] text-foreground">
                 UV
               </a>
             </div>
@@ -68,7 +69,7 @@ export default function Home() {
             <div className="min-w-full h-full relative">
               <div className="absolute inset-0 bg-primary/90">
                 <img
-                  src="/images/hero-showroom.jpg"
+                  src={withBasePath("/images/hero-showroom.jpg")}
                   alt="Umang Vaish Bespoke Tailors"
                   className="w-full h-full object-cover opacity-60"
                 />
@@ -122,11 +123,11 @@ export default function Home() {
         <div className="overflow-x-auto scrollbar-hide">
           <div className="flex gap-6 px-6 lg:px-12 pb-4">
             {[
-              { title: "Suits", image: "/images/collection-suits.jpg" },
-              { title: "Jackets", image: "/images/collection-jackets.jpg" },
-              { title: "Outerwear", image: "/images/collection-outerwear.jpg" },
-              { title: "Shirts", image: "/images/collection-shirts.jpg" },
-              { title: "Accessories", image: "/images/collection-accessories.jpg" },
+              { title: "Suits", image: withBasePath("/images/collection-suits.jpg") },
+              { title: "Jackets", image: withBasePath("/images/collection-jackets.jpg") },
+              { title: "Outerwear", image: withBasePath("/images/collection-outerwear.jpg") },
+              { title: "Shirts", image: withBasePath("/images/collection-shirts.jpg") },
+              { title: "Accessories", image: withBasePath("/images/collection-accessories.jpg") },
             ].map((item, i) => (
               <a
                 key={i}
@@ -162,12 +163,12 @@ export default function Home() {
         <div className="overflow-x-auto scrollbar-hide">
           <div className="flex gap-4 px-6 lg:px-12 pb-4">
             {[
-              { title: "Pattern Making", subtitle: "The Foundation", image: "/images/craft-pattern.jpg" },
-              { title: "Hand Stitching", subtitle: "Traditional Craft", image: "/images/craft-stitching.jpg" },
-              { title: "Canvas Work", subtitle: "The Structure", image: "/images/craft-canvas.jpg" },
-              { title: "Fitting Session", subtitle: "Perfection", image: "/images/craft-fitting.jpg" },
-              { title: "Final Details", subtitle: "The Finish", image: "/images/craft-details.jpg" },
-              { title: "Quality Check", subtitle: "Excellence", image: "/images/craft-quality.jpg" },
+              { title: "Pattern Making", subtitle: "The Foundation", image: withBasePath("/images/craft-pattern.jpg") },
+              { title: "Hand Stitching", subtitle: "Traditional Craft", image: withBasePath("/images/craft-stitching.jpg") },
+              { title: "Canvas Work", subtitle: "The Structure", image: withBasePath("/images/craft-canvas.jpg") },
+              { title: "Fitting Session", subtitle: "Perfection", image: withBasePath("/images/craft-fitting.jpg") },
+              { title: "Final Details", subtitle: "The Finish", image: withBasePath("/images/craft-details.jpg") },
+              { title: "Quality Check", subtitle: "Excellence", image: withBasePath("/images/craft-quality.jpg") },
             ].map((video, i) => (
               <div
                 key={i}
@@ -219,7 +220,7 @@ export default function Home() {
             <div className="order-1 lg:order-2">
               <div className="aspect-[4/5] bg-muted">
                 <img
-                  src="/images/bespoke-consultation.jpg"
+                  src={withBasePath("/images/bespoke-consultation.jpg")}
                   alt="Bespoke Consultation"
                   className="w-full h-full object-cover"
                 />
@@ -264,7 +265,7 @@ export default function Home() {
             <div>
               <div className="aspect-[4/5] bg-muted">
                 <img
-                  src="/images/heritage.jpg"
+                  src={withBasePath("/images/heritage.jpg")}
                   alt="Heritage"
                   className="w-full h-full object-cover"
                 />
@@ -315,9 +316,9 @@ export default function Home() {
 
           <div className="grid md:grid-cols-3 gap-8">
             {[
-              { title: "The Perfect Fit: Understanding Bespoke", category: "Craft", image: "/images/journal-fitting.jpg" },
-              { title: "Fabric Guide: Summer Linens", category: "Materials", image: "/images/journal-linen.jpg" },
-              { title: "Style Notes: The Navy Blazer", category: "Style", image: "/images/journal-blazer.jpg" },
+              { title: "The Perfect Fit: Understanding Bespoke", category: "Craft", image: withBasePath("/images/journal-fitting.jpg") },
+              { title: "Fabric Guide: Summer Linens", category: "Materials", image: withBasePath("/images/journal-linen.jpg") },
+              { title: "Style Notes: The Navy Blazer", category: "Style", image: withBasePath("/images/journal-blazer.jpg") },
             ].map((article, i) => (
               <a key={i} href="#" className="group">
                 <div className="aspect-[4/3] bg-muted overflow-hidden mb-4">
