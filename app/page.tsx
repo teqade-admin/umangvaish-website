@@ -42,7 +42,7 @@ export default function Home() {
             {/* Right Nav */}
             <div className="flex items-center justify-end">
               <nav className="hidden md:flex items-center gap-8 text-xs tracking-[0.2em] uppercase">
-                <a href="#heritage" className="text-foreground hover:text-muted-foreground transition-colors">
+                <a href={withBasePath("/heritage")} className="text-foreground hover:text-muted-foreground transition-colors">
                   Heritage
                 </a>
                 <a href="#contact" className="text-foreground hover:text-muted-foreground transition-colors">
@@ -284,6 +284,14 @@ export default function Home() {
                 Each generation has added to our legacy while preserving the techniques and values 
                 that define the house of Umang Vaish.
               </p>
+              <div className="flex flex-wrap items-center gap-6 mb-8">
+                <a
+                  href={withBasePath("/heritage")}
+                  className="inline-block text-xs tracking-[0.2em] uppercase text-foreground border-b border-foreground pb-1 hover:text-muted-foreground hover:border-muted-foreground transition-colors"
+                >
+                  Explore the Full Story
+                </a>
+              </div>
               <div className="grid grid-cols-3 gap-8 pt-8 border-t border-border">
                 {[
                   { number: "1940", label: "Founded" },
@@ -372,7 +380,7 @@ export default function Home() {
                 <a href="#bespoke" className="hover:text-background transition-colors">Bespoke</a>
                 <a href="#collection" className="hover:text-background transition-colors">Collection</a>
                 <a href="#fabrics" className="hover:text-background transition-colors">Fabrics</a>
-                <a href="#heritage" className="hover:text-background transition-colors">Heritage</a>
+                <a href={withBasePath("/heritage")} className="hover:text-background transition-colors">Heritage</a>
               </nav>
             </div>
             <div>
