@@ -236,10 +236,10 @@ export default function Home() {
                   muted
                   playsInline
                   onLoadedMetadata={(event) => {
-                    event.currentTarget.currentTime = 4
+                    event.currentTarget.currentTime = 2
                   }}
                   onEnded={(event) => {
-                    event.currentTarget.currentTime = 4
+                    event.currentTarget.currentTime = 2
                     void event.currentTarget.play()
                   }}
                   className="w-full h-full object-cover"
