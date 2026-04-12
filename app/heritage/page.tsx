@@ -127,11 +127,11 @@ export default function HeritagePage() {
             <div className="mt-8 max-w-3xl space-y-6 text-lg leading-relaxed text-muted-foreground">
               <p>
                 The Vaish family has been in bespoke tailoring for over eight decades. What began as a small atelier
-                has grown into one of India&apos;s most respected bespoke houses.
+                has grown into one of India&apos;s most respected bespoke tailoring houses.
               </p>
               <p>
                 Each generation has added to the legacy while preserving the techniques and values that define the
-                house of Umang Vaish.
+                house of Umang Vaish Bespoke.
               </p>
             </div>
           </div>

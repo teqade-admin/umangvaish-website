@@ -1,11 +1,26 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import { Menu, ChevronLeft, ChevronRight, Play } from "lucide-react"
+import { Menu, ChevronLeft, ChevronRight } from "lucide-react"
 import { EmailModal } from "@/components/email-modal"
 import { withBasePath } from "@/lib/base-path"
 
 export default function Home() {
+  const fabricBrands = [
+    { mill: "Loro Piana", origin: "Italy" },
+    { mill: "Reda", origin: "Italy" },
+    { mill: "Marzoni", origin: "Italy" },
+    { mill: "Raymond", origin: "India" },
+    { mill: "Vitale Barberis Canonico", origin: "Italy" },
+    { mill: "Soktas", origin: "Turkey" },
+    { mill: "Tessitura Monti", origin: "Italy" },
+    { mill: "Ariston Napoli", origin: "Italy" },
+    { mill: "Porter & Harding", origin: "Scotland" },
+    { mill: "W. Bill", origin: "England" },
+    { mill: "Linen Club", origin: "India" },
+    { mill: "Dugdale Bros & Co", origin: "England" },
+  ]
+
   return (
     <div className="min-h-screen bg-background">
       <EmailModal />
@@ -125,7 +140,7 @@ export default function Home() {
             {[
               { title: "Suits", image: withBasePath("/images/collection-suits.jpg") },
               { title: "Jackets", image: withBasePath("/images/collection-jackets.jpg") },
-              { title: "Outerwear", image: withBasePath("/images/collection-outerwear.jpg") },
+              { title: "Outerwear", image: withBasePath("/images/collection-outerwear.png") },
               { title: "Shirts", image: withBasePath("/images/collection-shirts.jpg") },
               { title: "Accessories", image: withBasePath("/images/collection-accessories.jpg") },
             ].map((item, i) => (
@@ -134,12 +149,13 @@ export default function Home() {
                 href={`#${item.title.toLowerCase()}`}
                 className="flex-shrink-0 w-[300px] md:w-[400px] group cursor-pointer"
               >
-                <div className="aspect-[3/4] bg-muted overflow-hidden mb-4">
+                <div className="relative aspect-[3/4] bg-muted overflow-hidden mb-4">
                   <img
                     src={item.image}
                     alt={item.title}
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                   />
+                  <div className="pointer-events-none absolute inset-0 bg-primary/5" />
                 </div>
                 <p className="text-sm tracking-[0.2em] uppercase text-foreground group-hover:text-muted-foreground transition-colors">
                   {item.title}
@@ -166,7 +182,7 @@ export default function Home() {
               { title: "Pattern Making", subtitle: "The Foundation", image: withBasePath("/images/craft-pattern.jpg") },
               { title: "Hand Stitching", subtitle: "Traditional Craft", image: withBasePath("/images/craft-stitching.jpg") },
               { title: "Canvas Work", subtitle: "The Structure", image: withBasePath("/images/craft-canvas.jpg") },
-              { title: "Fitting Session", subtitle: "Perfection", image: withBasePath("/images/craft-fitting.jpg") },
+              { title: "Fitting Session", subtitle: "Perfection", image: withBasePath("/images/craft-fitting.png") },
               { title: "Final Details", subtitle: "The Finish", image: withBasePath("/images/craft-details.jpg") },
               { title: "Quality Check", subtitle: "Excellence", image: withBasePath("/images/craft-quality.jpg") },
             ].map((video, i) => (
@@ -180,11 +196,6 @@ export default function Home() {
                     alt={video.title}
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                   />
-                  <div className="absolute inset-0 bg-foreground/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                    <div className="w-14 h-14 rounded-full bg-background/90 flex items-center justify-center">
-                      <Play className="w-5 h-5 text-foreground ml-1" fill="currentColor" />
-                    </div>
-                  </div>
                   <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-foreground/80 to-transparent">
                     <p className="text-xs tracking-[0.2em] uppercase text-background/80 mb-1">{video.subtitle}</p>
                     <p className="text-sm tracking-wide text-background font-medium">{video.title}</p>
@@ -219,9 +230,18 @@ export default function Home() {
             </div>
             <div className="order-1 lg:order-2">
               <div className="aspect-[4/5] bg-muted">
-                <img
-                  src={withBasePath("/images/bespoke-consultation.jpg")}
-                  alt="Bespoke Consultation"
+                <video
+                  src={withBasePath("/videos/bespoke.mp4")}
+                  autoPlay
+                  muted
+                  playsInline
+                  onLoadedMetadata={(event) => {
+                    event.currentTarget.currentTime = 4
+                  }}
+                  onEnded={(event) => {
+                    event.currentTarget.currentTime = 4
+                    void event.currentTarget.play()
+                  }}
                   className="w-full h-full object-cover"
                 />
               </div>
@@ -242,16 +262,17 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-px bg-primary-foreground/20">
-            {[
-              { mill: "Loro Piana", origin: "Italy", specialty: "Cashmere & Wool" },
-              { mill: "Holland & Sherry", origin: "England", specialty: "Worsted Wool" },
-              { mill: "Dormeuil", origin: "France", specialty: "Luxury Suiting" },
-            ].map((fabric, i) => (
-              <div key={i} className="bg-primary p-12 text-center">
-                <p className="text-2xl font-light mb-2">{fabric.mill}</p>
-                <p className="text-xs tracking-[0.2em] uppercase text-primary-foreground/60 mb-4">{fabric.origin}</p>
-                <p className="text-sm text-primary-foreground/80">{fabric.specialty}</p>
+          <div className="flex flex-wrap justify-center gap-3 md:gap-4">
+            {fabricBrands.map((fabric, i) => (
+              <div
+                key={i}
+                className="inline-flex min-h-12 items-center gap-2 rounded-full border border-primary-foreground/25 bg-primary-foreground/8 px-4 py-2.5 backdrop-blur-sm md:min-h-14 md:px-5"
+              >
+                <p className="text-xs font-medium leading-none text-primary-foreground md:text-sm">{fabric.mill}</p>
+                <span className="text-primary-foreground/35">•</span>
+                <p className="text-[9px] uppercase tracking-[0.16em] text-primary-foreground/65 md:text-[10px] md:tracking-[0.2em]">
+                  {fabric.origin}
+                </p>
               </div>
             ))}
           </div>
