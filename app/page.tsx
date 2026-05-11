@@ -1,9 +1,9 @@
 "use client"
 
 import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Menu, ChevronLeft, ChevronRight } from "lucide-react"
+import { ChevronLeft, ChevronRight } from "lucide-react"
 import { EmailModal } from "@/components/email-modal"
+import { MobileNav } from "@/components/mobile-nav"
 import { withBasePath } from "@/lib/base-path"
 
 export default function Home() {
@@ -95,9 +95,16 @@ export default function Home() {
           <div className="grid grid-cols-3 items-center h-20">
             {/* Left Nav */}
             <div className="flex items-center">
-              <Button variant="ghost" size="icon" className="md:hidden">
-                <Menu className="h-5 w-5" />
-              </Button>
+              <MobileNav
+                links={[
+                  { href: "#bespoke", label: "Bespoke" },
+                  { href: "#collection", label: "Collection" },
+                  { href: "#fabrics", label: "Fabrics" },
+                  { href: withBasePath("/heritage"), label: "Heritage" },
+                  { href: "#contact", label: "Contact" },
+                  { href: "#contact", label: "Book", isPrimary: true },
+                ]}
+              />
               <nav className="hidden md:flex items-center gap-8 text-xs tracking-[0.2em] uppercase">
                 <a href="#bespoke" className="text-foreground hover:text-muted-foreground transition-colors">
                   Bespoke

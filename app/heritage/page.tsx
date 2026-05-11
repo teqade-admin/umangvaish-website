@@ -1,6 +1,5 @@
 import type { Metadata } from "next"
-import { Menu } from "lucide-react"
-import { Button } from "@/components/ui/button"
+import { MobileNav } from "@/components/mobile-nav"
 import { ScrollScaleImage } from "@/components/scroll-scale-image"
 import { withBasePath } from "@/lib/base-path"
 
@@ -59,9 +58,17 @@ export default function HeritagePage() {
         <div className="container mx-auto px-6 lg:px-12">
           <div className="grid grid-cols-3 items-center h-20">
             <div className="flex items-center">
-              <Button variant="ghost" size="icon" className="md:hidden">
-                <Menu className="h-5 w-5" />
-              </Button>
+              <MobileNav
+                variant="primary"
+                links={[
+                  { href: withBasePath("/#bespoke"), label: "Bespoke" },
+                  { href: withBasePath("/#collection"), label: "Collection" },
+                  { href: withBasePath("/#fabrics"), label: "Fabrics" },
+                  { href: withBasePath("/heritage"), label: "Heritage" },
+                  { href: withBasePath("/#contact"), label: "Contact" },
+                  { href: withBasePath("/#contact"), label: "Book", isPrimary: true },
+                ]}
+              />
               <nav className="hidden md:flex items-center gap-8 text-xs tracking-[0.2em] uppercase">
                 <a
                   href={withBasePath("/#bespoke")}
