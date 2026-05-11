@@ -16,8 +16,8 @@ export const metadata: Metadata = {
     "Three generations of bespoke excellence. Custom suits, shirts, and tuxedos crafted from the finest Italian, English, and Indian fabrics.",
   generator: "v0.app",
   icons: {
-    icon: "https://raw.githubusercontent.com/teqade-admin/website-v2/refs/heads/main/logo-green.ico",
-    shortcut: "https://raw.githubusercontent.com/teqade-admin/website-v2/refs/heads/main/logo-green.ico",
+    icon: withBasePath("/images/uv-logo-white-32.png"),
+    shortcut: withBasePath("/images/uv-logo-white-32.png"),
     apple: withBasePath("/apple-icon.png"),
   },
 }

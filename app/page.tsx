@@ -1,11 +1,15 @@
 "use client"
 
+import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Menu, ChevronLeft, ChevronRight } from "lucide-react"
 import { EmailModal } from "@/components/email-modal"
 import { withBasePath } from "@/lib/base-path"
 
 export default function Home() {
+  const [desktopReviewSlide, setDesktopReviewSlide] = useState(0)
+  const [mobileReviewSlide, setMobileReviewSlide] = useState(0)
+
   const fabricBrands = [
     { mill: "Loro Piana", origin: "Italy" },
     { mill: "Reda", origin: "Italy" },
@@ -20,6 +24,66 @@ export default function Home() {
     { mill: "Linen Club", origin: "India" },
     { mill: "Dugdale Bros & Co", origin: "England" },
   ]
+
+  const clientReviews = [
+    {
+      name: "Aarav Mehra",
+      occasion: "Wedding Suit",
+      review:
+        "The fit was immaculate from the first trial. Every detail felt considered, from the shoulder line to the final hand finish.",
+    },
+    {
+      name: "Rohan Malhotra",
+      occasion: "Business Wardrobe",
+      review:
+        "Umang Vaish understood exactly how I wanted to dress for work: sharp, comfortable, and understated. The suits have become my daily standard.",
+    },
+    {
+      name: "Kabir Sethi",
+      occasion: "Bespoke Blazer",
+      review:
+        "The team guided me through fabric, proportion, and styling with real patience. The finished blazer feels personal without being loud.",
+    },
+    {
+      name: "Vikram Khanna",
+      occasion: "Black Tie",
+      review:
+        "My tuxedo had the kind of balance that is difficult to describe until you wear it. Clean, elegant, and perfectly proportioned.",
+    },
+    {
+      name: "Nikhil Batra",
+      occasion: "Linen Suit",
+      review:
+        "The linen suit was light, structured, and beautifully finished. It handled a long summer event without ever feeling careless.",
+    },
+    {
+      name: "Arjun Kapur",
+      occasion: "Bandhgala",
+      review:
+        "The bandhgala felt rooted in tradition but completely current. The tailoring gave it presence without making it feel heavy.",
+    },
+  ]
+
+  const reviewsPerSlide = 3
+  const desktopReviewSlides = Array.from({ length: Math.ceil(clientReviews.length / reviewsPerSlide) }, (_, i) =>
+    clientReviews.slice(i * reviewsPerSlide, i * reviewsPerSlide + reviewsPerSlide)
+  )
+
+  const showPreviousDesktopReviews = () => {
+    setDesktopReviewSlide((current) => (current === 0 ? desktopReviewSlides.length - 1 : current - 1))
+  }
+
+  const showNextDesktopReviews = () => {
+    setDesktopReviewSlide((current) => (current === desktopReviewSlides.length - 1 ? 0 : current + 1))
+  }
+
+  const showPreviousMobileReview = () => {
+    setMobileReviewSlide((current) => (current === 0 ? clientReviews.length - 1 : current - 1))
+  }
+
+  const showNextMobileReview = () => {
+    setMobileReviewSlide((current) => (current === clientReviews.length - 1 ? 0 : current + 1))
+  }
 
   return (
     <div className="min-h-screen bg-background">
@@ -49,8 +113,12 @@ export default function Home() {
 
             {/* Center Logo */}
             <div className="flex justify-center">
-              <a href={withBasePath("/")} className="text-3xl md:text-4xl font-light tracking-[0.3em] text-foreground">
-                UV
+              <a href={withBasePath("/")} className="block" aria-label="Umang Vaish home">
+                <img
+                  src={withBasePath("/images/uv-logo-white.png")}
+                  alt="Umang Vaish"
+                  className="h-12 w-12 object-contain md:h-14 md:w-14"
+                />
               </a>
             </div>
 
@@ -330,39 +398,131 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Journal Section */}
+      {/* Client Reviews Section */}
       <section className="py-24 bg-muted/30">
         <div className="container mx-auto px-6 lg:px-12">
           <div className="flex items-end justify-between mb-12">
             <div>
-              <p className="text-xs tracking-[0.3em] uppercase text-muted-foreground mb-3">Journal</p>
-              <h2 className="text-4xl md:text-5xl font-light text-foreground">Latest Stories</h2>
+              <p className="text-xs tracking-[0.3em] uppercase text-muted-foreground mb-3">In Their Words</p>
+              <h2 className="text-4xl md:text-5xl font-light text-foreground">Client Experiences</h2>
             </div>
-            <a href="#journal" className="text-xs tracking-[0.2em] uppercase text-foreground hover:text-muted-foreground transition-colors hidden md:block">
-              More Articles
-            </a>
+            <div className="hidden items-center gap-3 md:flex">
+              <button
+                type="button"
+                onClick={showPreviousDesktopReviews}
+                className="flex h-11 w-11 items-center justify-center border border-border text-foreground transition-colors hover:bg-foreground hover:text-background"
+                aria-label="Show previous client reviews"
+              >
+                <ChevronLeft className="h-5 w-5" />
+              </button>
+              <button
+                type="button"
+                onClick={showNextDesktopReviews}
+                className="flex h-11 w-11 items-center justify-center border border-border text-foreground transition-colors hover:bg-foreground hover:text-background"
+                aria-label="Show next client reviews"
+              >
+                <ChevronRight className="h-5 w-5" />
+              </button>
+            </div>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8">
-            {[
-              { title: "The Perfect Fit: Understanding Bespoke", category: "Craft", image: withBasePath("/images/journal-fitting.jpg") },
-              { title: "Fabric Guide: Summer Linens", category: "Materials", image: withBasePath("/images/journal-linen.jpg") },
-              { title: "Style Notes: The Navy Blazer", category: "Style", image: withBasePath("/images/journal-blazer.jpg") },
-            ].map((article, i) => (
-              <a key={i} href="#" className="group">
-                <div className="aspect-[4/3] bg-muted overflow-hidden mb-4">
-                  <img
-                    src={article.image}
-                    alt={article.title}
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                  />
+          <div className="hidden overflow-hidden md:block">
+            <div
+              className="flex transition-transform duration-500 ease-out"
+              style={{ transform: `translateX(-${desktopReviewSlide * 100}%)` }}
+            >
+              {desktopReviewSlides.map((slide, slideIndex) => (
+                <div key={slideIndex} className="grid min-w-full grid-cols-1 gap-8 md:grid-cols-3">
+                  {slide.map((review) => (
+                    <article
+                      key={review.name}
+                      className="flex min-h-[280px] flex-col justify-between border border-border bg-background p-8"
+                    >
+                      <div>
+                        <p className="mb-6 text-5xl font-light leading-none text-muted-foreground/40">&ldquo;</p>
+                        <p className="text-lg font-light leading-relaxed text-foreground">&ldquo;{review.review}&rdquo;</p>
+                      </div>
+                      <div className="mt-10 border-t border-border pt-6">
+                        <p className="mb-2 text-xs uppercase tracking-[0.2em] text-muted-foreground">
+                          {review.occasion}
+                        </p>
+                        <p className="text-sm uppercase tracking-[0.15em] text-foreground">{review.name}</p>
+                      </div>
+                    </article>
+                  ))}
                 </div>
-                <p className="text-xs tracking-[0.2em] uppercase text-muted-foreground mb-2">{article.category}</p>
-                <h3 className="text-lg font-light text-foreground group-hover:text-muted-foreground transition-colors">
-                  {article.title}
-                </h3>
-              </a>
-            ))}
+              ))}
+            </div>
+          </div>
+
+          <div className="overflow-hidden md:hidden">
+            <div
+              className="flex transition-transform duration-500 ease-out"
+              style={{ transform: `translateX(-${mobileReviewSlide * 100}%)` }}
+            >
+              {clientReviews.map((review) => (
+                <article
+                  key={review.name}
+                  className="flex min-w-full min-h-[300px] flex-col justify-between border border-border bg-background p-8"
+                >
+                  <div>
+                    <p className="mb-6 text-5xl font-light leading-none text-muted-foreground/40">&ldquo;</p>
+                    <p className="text-lg font-light leading-relaxed text-foreground">&ldquo;{review.review}&rdquo;</p>
+                  </div>
+                  <div className="mt-10 border-t border-border pt-6">
+                    <p className="mb-2 text-xs uppercase tracking-[0.2em] text-muted-foreground">
+                      {review.occasion}
+                    </p>
+                    <p className="text-sm uppercase tracking-[0.15em] text-foreground">{review.name}</p>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </div>
+
+          <div className="mt-8 flex items-center justify-between gap-6 md:justify-center">
+            <button
+              type="button"
+              onClick={showPreviousMobileReview}
+              className="flex h-11 w-11 items-center justify-center border border-border text-foreground transition-colors hover:bg-foreground hover:text-background md:hidden"
+              aria-label="Show previous client reviews"
+            >
+              <ChevronLeft className="h-5 w-5" />
+            </button>
+            <div className="hidden items-center gap-3 md:flex">
+              {desktopReviewSlides.map((_, i) => (
+                <button
+                  key={i}
+                  type="button"
+                  onClick={() => setDesktopReviewSlide(i)}
+                  className={`h-2.5 w-2.5 rounded-full transition-colors ${
+                    desktopReviewSlide === i ? "bg-foreground" : "bg-muted-foreground/30"
+                  }`}
+                  aria-label={`Show client review slide ${i + 1}`}
+                />
+              ))}
+            </div>
+            <div className="flex items-center gap-2 md:hidden">
+              {clientReviews.map((_, i) => (
+                <button
+                  key={i}
+                  type="button"
+                  onClick={() => setMobileReviewSlide(i)}
+                  className={`h-2.5 w-2.5 rounded-full transition-colors ${
+                    mobileReviewSlide === i ? "bg-foreground" : "bg-muted-foreground/30"
+                  }`}
+                  aria-label={`Show client review ${i + 1}`}
+                />
+              ))}
+            </div>
+            <button
+              type="button"
+              onClick={showNextMobileReview}
+              className="flex h-11 w-11 items-center justify-center border border-border text-foreground transition-colors hover:bg-foreground hover:text-background md:hidden"
+              aria-label="Show next client reviews"
+            >
+              <ChevronRight className="h-5 w-5" />
+            </button>
           </div>
         </div>
       </section>

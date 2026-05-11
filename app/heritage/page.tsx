@@ -85,11 +85,12 @@ export default function HeritagePage() {
             </div>
 
             <div className="flex justify-center">
-              <a
-                href={withBasePath("/")}
-                className="text-3xl md:text-4xl font-light tracking-[0.3em] text-primary-foreground"
-              >
-                UV
+              <a href={withBasePath("/")} className="block" aria-label="Umang Vaish home">
+                <img
+                  src={withBasePath("/images/uv-logo-white.png")}
+                  alt="Umang Vaish"
+                  className="h-12 w-12 object-contain md:h-14 md:w-14"
+                />
               </a>
             </div>
 
