@@ -8,6 +8,9 @@ const nextConfig = {
   output: "export",
   basePath,
   assetPrefix: basePath || undefined,
+  turbopack: {
+    root: process.cwd(),
+  },
   env: {
     NEXT_PUBLIC_BASE_PATH: basePath,
   },

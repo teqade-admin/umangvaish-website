@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 import { EmailModal } from "@/components/email-modal"
 import { MobileNav } from "@/components/mobile-nav"
@@ -9,6 +9,8 @@ import { withBasePath } from "@/lib/base-path"
 export default function Home() {
   const [desktopReviewSlide, setDesktopReviewSlide] = useState(0)
   const [mobileReviewSlide, setMobileReviewSlide] = useState(0)
+  const clientGalleryRef = useRef<HTMLDivElement>(null)
+  const isClientGalleryPausedRef = useRef(false)
 
   const fabricBrands = [
     { mill: "Loro Piana", origin: "Italy" },
@@ -64,6 +66,21 @@ export default function Home() {
     },
   ]
 
+  const clientGallery = [
+    withBasePath("/images/clients/uv-testimonial-01.png"),
+    withBasePath("/images/clients/uv-testimonial-02.png"),
+    withBasePath("/images/clients/uv-testimonial-03.png"),
+    withBasePath("/images/clients/uv-testimonial-04.png"),
+    withBasePath("/images/clients/uv-testimonial-05.png"),
+    withBasePath("/images/clients/uv-testimonial-06.png"),
+    withBasePath("/images/clients/uv-testimonial-07.png"),
+    withBasePath("/images/clients/uv-testimonial-08.png"),
+    withBasePath("/images/clients/uv-testimonial-09.png"),
+    withBasePath("/images/clients/uv-testimonial-10.png"),
+    withBasePath("/images/clients/uv-testimonial-11.png"),
+    withBasePath("/images/clients/uv-testimonial-12.png"),
+  ]
+
   const reviewsPerSlide = 3
   const desktopReviewSlides = Array.from({ length: Math.ceil(clientReviews.length / reviewsPerSlide) }, (_, i) =>
     clientReviews.slice(i * reviewsPerSlide, i * reviewsPerSlide + reviewsPerSlide)
@@ -84,6 +101,39 @@ export default function Home() {
   const showNextMobileReview = () => {
     setMobileReviewSlide((current) => (current === clientReviews.length - 1 ? 0 : current + 1))
   }
+
+  useEffect(() => {
+    const gallery = clientGalleryRef.current
+
+    if (!gallery || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      return
+    }
+
+    let frameId = 0
+    let previousTime = performance.now()
+    const scrollSpeed = 36
+
+    const animateGallery = (currentTime: number) => {
+      const elapsedSeconds = (currentTime - previousTime) / 1000
+      previousTime = currentTime
+
+      if (!isClientGalleryPausedRef.current) {
+        const maxScrollLeft = gallery.scrollWidth - gallery.clientWidth
+
+        if (gallery.scrollLeft >= maxScrollLeft - 1) {
+          gallery.scrollLeft = 0
+        } else {
+          gallery.scrollLeft += scrollSpeed * elapsedSeconds
+        }
+      }
+
+      frameId = requestAnimationFrame(animateGallery)
+    }
+
+    frameId = requestAnimationFrame(animateGallery)
+
+    return () => cancelAnimationFrame(frameId)
+  }, [])
 
   return (
     <div className="min-h-screen bg-background">
@@ -530,6 +580,47 @@ export default function Home() {
             >
               <ChevronRight className="h-5 w-5" />
             </button>
+          </div>
+        </div>
+      </section>
+
+      {/* Client Gallery Section */}
+      <section className="py-24 bg-background">
+        <div className="container mx-auto px-6 lg:px-12 mb-12">
+          <div className="max-w-3xl">
+            <p className="text-xs tracking-[0.3em] uppercase text-muted-foreground mb-3">Tailored For Them</p>
+            <h2 className="text-4xl md:text-5xl font-light text-foreground">Client Gallery</h2>
+          </div>
+        </div>
+
+        <div
+          ref={clientGalleryRef}
+          onMouseEnter={() => {
+            isClientGalleryPausedRef.current = true
+          }}
+          onMouseLeave={() => {
+            isClientGalleryPausedRef.current = false
+          }}
+          onTouchStart={() => {
+            isClientGalleryPausedRef.current = true
+          }}
+          onTouchEnd={() => {
+            isClientGalleryPausedRef.current = false
+          }}
+          className="overflow-x-auto scrollbar-hide"
+        >
+          <div className="flex w-max gap-6 px-6 pb-4 lg:px-12">
+            {clientGallery.map((image, i) => (
+              <article key={image} className="w-[260px] flex-shrink-0 group md:w-[340px]">
+                <div className="aspect-[3/4] overflow-hidden bg-muted">
+                  <img
+                    src={image}
+                    alt={`Client testimonial ${i + 1}`}
+                    className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  />
+                </div>
+              </article>
+            ))}
           </div>
         </div>
       </section>
