@@ -296,11 +296,11 @@ export default function Home() {
                 key={i}
                 className="flex-shrink-0 w-[220px] md:w-[280px] group cursor-pointer"
               >
-                <div className="aspect-[9/16] bg-primary/10 overflow-hidden relative">
+                <div className="bg-primary/10 overflow-hidden relative">
                   <img
                     src={video.image}
                     alt={video.title}
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    className="h-auto w-full transition-transform duration-700 group-hover:scale-105"
                   />
                   <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-foreground/80 to-transparent">
                     <p className="text-xs tracking-[0.2em] uppercase text-background/80 mb-1">{video.subtitle}</p>

@@ -93,7 +93,7 @@ export default function HeritagePage() {
             <div className="flex justify-center">
               <a href={withBasePath("/")} className="block" aria-label="Umang Vaish home">
                 <img
-                  src={withBasePath("/images/logo/uv-black.png")}
+                  src={withBasePath("/images/logo/uv-white.png")}
                   alt="Umang Vaish"
                   className="h-12 w-12 object-contain md:h-14 md:w-14"
                 />
