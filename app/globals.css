@@ -1,83 +1,129 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+@font-face {
+  font-family: "Cormorant Garamond";
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url("/fonts/cormorant-garamond/cormorant-garamond-300.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Cormorant Garamond";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/cormorant-garamond/cormorant-garamond-400.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Cormorant Garamond";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("/fonts/cormorant-garamond/cormorant-garamond-500.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Cormorant Garamond";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("/fonts/cormorant-garamond/cormorant-garamond-600.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Cormorant Garamond";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("/fonts/cormorant-garamond/cormorant-garamond-700.ttf") format("truetype");
+}
+
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  /* Elegant white & brown - Huntsman inspired */
-  --background: oklch(0.995 0 0); /* Pure white */
-  --foreground: oklch(0.25 0.03 45); /* Deep brown/charcoal */
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.25 0.03 45);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.25 0.03 45);
-  --primary: oklch(0.30 0.04 45); /* Rich dark brown */
-  --primary-foreground: oklch(0.98 0.005 60); /* Warm white */
-  --secondary: oklch(0.40 0.05 45); /* Medium brown */
-  --secondary-foreground: oklch(0.98 0.005 60);
-  --muted: oklch(0.96 0.008 60); /* Warm cream */
-  --muted-foreground: oklch(0.50 0.02 45);
-  --accent: oklch(0.55 0.06 50); /* Tan accent */
-  --accent-foreground: oklch(0.98 0.005 60);
+  --almond-cream: #f0ead8;
+  --burgundy-wine: #3b0d1a;
+  --golden-chamomile: #d2bf81;
+  --olive-grove: #6f6c43;
+
+  --background: var(--almond-cream);
+  --foreground: var(--burgundy-wine);
+  --card: #f7f2e4;
+  --card-foreground: var(--burgundy-wine);
+  --popover: #f7f2e4;
+  --popover-foreground: var(--burgundy-wine);
+  --primary: var(--burgundy-wine);
+  --primary-foreground: var(--almond-cream);
+  --secondary: var(--olive-grove);
+  --secondary-foreground: var(--almond-cream);
+  --muted: #e6dec3;
+  --muted-foreground: var(--olive-grove);
+  --accent: var(--golden-chamomile);
+  --accent-foreground: var(--burgundy-wine);
   --destructive: oklch(0.577 0.245 27.325);
-  --destructive-foreground: oklch(0.99 0 0);
-  --border: oklch(0.92 0.01 50);
-  --input: oklch(0.92 0.01 50);
-  --ring: oklch(0.40 0.05 45);
-  --chart-1: oklch(0.30 0.04 45);
-  --chart-2: oklch(0.40 0.05 45);
-  --chart-3: oklch(0.55 0.06 50);
-  --chart-4: oklch(0.70 0.05 48);
-  --chart-5: oklch(0.50 0.04 43);
+  --destructive-foreground: var(--almond-cream);
+  --border: #d7ceb0;
+  --input: #d7ceb0;
+  --ring: var(--burgundy-wine);
+  --chart-1: var(--burgundy-wine);
+  --chart-2: var(--olive-grove);
+  --chart-3: #b9a765;
+  --chart-4: var(--golden-chamomile);
+  --chart-5: #8c7f52;
   --radius: 0rem;
-  --sidebar: oklch(0.995 0 0);
-  --sidebar-foreground: oklch(0.25 0.03 45);
-  --sidebar-primary: oklch(0.30 0.04 45);
-  --sidebar-primary-foreground: oklch(0.98 0.005 60);
-  --sidebar-accent: oklch(0.96 0.008 60);
-  --sidebar-accent-foreground: oklch(0.25 0.03 45);
-  --sidebar-border: oklch(0.92 0.01 50);
-  --sidebar-ring: oklch(0.40 0.05 45);
+  --sidebar: var(--almond-cream);
+  --sidebar-foreground: var(--burgundy-wine);
+  --sidebar-primary: var(--burgundy-wine);
+  --sidebar-primary-foreground: var(--almond-cream);
+  --sidebar-accent: var(--golden-chamomile);
+  --sidebar-accent-foreground: var(--burgundy-wine);
+  --sidebar-border: #d7ceb0;
+  --sidebar-ring: var(--burgundy-wine);
 }
 
 .dark {
-  --background: oklch(0.15 0.015 45);
-  --foreground: oklch(0.95 0.005 60);
-  --card: oklch(0.18 0.02 45);
-  --card-foreground: oklch(0.95 0.005 60);
-  --popover: oklch(0.18 0.02 45);
-  --popover-foreground: oklch(0.95 0.005 60);
-  --primary: oklch(0.75 0.05 50);
-  --primary-foreground: oklch(0.15 0.015 45);
-  --secondary: oklch(0.28 0.03 45);
-  --secondary-foreground: oklch(0.95 0.005 60);
-  --muted: oklch(0.22 0.02 45);
-  --muted-foreground: oklch(0.65 0.03 50);
-  --accent: oklch(0.55 0.06 50);
-  --accent-foreground: oklch(0.95 0.005 60);
+  --background: var(--burgundy-wine);
+  --foreground: var(--almond-cream);
+  --card: #4a1424;
+  --card-foreground: var(--almond-cream);
+  --popover: #4a1424;
+  --popover-foreground: var(--almond-cream);
+  --primary: var(--golden-chamomile);
+  --primary-foreground: var(--burgundy-wine);
+  --secondary: var(--olive-grove);
+  --secondary-foreground: var(--almond-cream);
+  --muted: #55192a;
+  --muted-foreground: #d9cfb7;
+  --accent: var(--golden-chamomile);
+  --accent-foreground: var(--burgundy-wine);
   --destructive: oklch(0.396 0.141 25.723);
-  --destructive-foreground: oklch(0.95 0.005 60);
-  --border: oklch(0.28 0.025 45);
-  --input: oklch(0.28 0.025 45);
-  --ring: oklch(0.55 0.06 50);
-  --chart-1: oklch(0.75 0.05 50);
-  --chart-2: oklch(0.55 0.06 50);
-  --chart-3: oklch(0.40 0.05 45);
-  --chart-4: oklch(0.50 0.04 43);
-  --chart-5: oklch(0.65 0.04 48);
-  --sidebar: oklch(0.15 0.015 45);
-  --sidebar-foreground: oklch(0.95 0.005 60);
-  --sidebar-primary: oklch(0.75 0.05 50);
-  --sidebar-primary-foreground: oklch(0.15 0.015 45);
-  --sidebar-accent: oklch(0.22 0.02 45);
-  --sidebar-accent-foreground: oklch(0.95 0.005 60);
-  --sidebar-border: oklch(0.28 0.025 45);
-  --sidebar-ring: oklch(0.55 0.06 50);
+  --destructive-foreground: var(--almond-cream);
+  --border: #6b3040;
+  --input: #6b3040;
+  --ring: var(--golden-chamomile);
+  --chart-1: var(--golden-chamomile);
+  --chart-2: var(--golden-chamomile);
+  --chart-3: var(--olive-grove);
+  --chart-4: var(--almond-cream);
+  --chart-5: #b593a0;
+  --sidebar: var(--burgundy-wine);
+  --sidebar-foreground: var(--almond-cream);
+  --sidebar-primary: var(--golden-chamomile);
+  --sidebar-primary-foreground: var(--burgundy-wine);
+  --sidebar-accent: var(--olive-grove);
+  --sidebar-accent-foreground: var(--almond-cream);
+  --sidebar-border: #6b3040;
+  --sidebar-ring: var(--golden-chamomile);
 }
 
 @theme inline {
-  --font-sans: Arial, Helvetica, sans-serif;
-  --font-serif: Georgia, "Times New Roman", serif;
+  --font-sans: "Suisse International", "Suisse Intl", Arial, Helvetica, sans-serif;
+  --font-serif: "Cormorant Garamond", "Coromorant Garamond", Georgia, "Times New Roman", serif;
+  --font-heading: "Cormorant Garamond", "Coromorant Garamond", Georgia, "Times New Roman", serif;
+  --font-subheading: "Neue Haas Grotesk", "Neue Haas Grotesk Display", "Helvetica Neue", Arial, sans-serif;
   --font-mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -123,6 +169,23 @@
   }
   body {
     @apply bg-background text-foreground;
+    font-family: var(--font-sans);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-heading);
+  }
+
+  p[class*="uppercase"],
+  a[class*="uppercase"],
+  nav,
+  button {
+    font-family: var(--font-subheading);
   }
 }
 

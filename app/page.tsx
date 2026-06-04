@@ -1,15 +1,15 @@
 "use client"
 
-import { useEffect, useRef, useState } from "react"
-import { ChevronLeft, ChevronRight } from "lucide-react"
+import { useEffect, useRef } from "react"
+import { ArrowRight, Instagram, Mail, MapPin, MessageCircle, Phone, Plus } from "lucide-react"
 import { EmailModal } from "@/components/email-modal"
 import { MobileNav } from "@/components/mobile-nav"
 import { withBasePath } from "@/lib/base-path"
 
 export default function Home() {
-  const [desktopReviewSlide, setDesktopReviewSlide] = useState(0)
-  const [mobileReviewSlide, setMobileReviewSlide] = useState(0)
+  const clientReviewsRef = useRef<HTMLDivElement>(null)
   const clientGalleryRef = useRef<HTMLDivElement>(null)
+  const isClientReviewsPausedRef = useRef(false)
   const isClientGalleryPausedRef = useRef(false)
 
   const fabricBrands = [
@@ -81,56 +81,44 @@ export default function Home() {
     withBasePath("/images/clients/uv-testimonial-12.png"),
   ]
 
-  const reviewsPerSlide = 3
-  const desktopReviewSlides = Array.from({ length: Math.ceil(clientReviews.length / reviewsPerSlide) }, (_, i) =>
-    clientReviews.slice(i * reviewsPerSlide, i * reviewsPerSlide + reviewsPerSlide)
-  )
-
-  const showPreviousDesktopReviews = () => {
-    setDesktopReviewSlide((current) => (current === 0 ? desktopReviewSlides.length - 1 : current - 1))
-  }
-
-  const showNextDesktopReviews = () => {
-    setDesktopReviewSlide((current) => (current === desktopReviewSlides.length - 1 ? 0 : current + 1))
-  }
-
-  const showPreviousMobileReview = () => {
-    setMobileReviewSlide((current) => (current === 0 ? clientReviews.length - 1 : current - 1))
-  }
-
-  const showNextMobileReview = () => {
-    setMobileReviewSlide((current) => (current === clientReviews.length - 1 ? 0 : current + 1))
-  }
-
   useEffect(() => {
+    const reviews = clientReviewsRef.current
     const gallery = clientGalleryRef.current
 
-    if (!gallery || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    if ((!reviews && !gallery) || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       return
     }
 
     let frameId = 0
     let previousTime = performance.now()
-    const scrollSpeed = 36
+    const reviewScrollSpeed = 28
+    const galleryScrollSpeed = 36
 
-    const animateGallery = (currentTime: number) => {
+    const scrollArea = (element: HTMLDivElement | null, isPaused: boolean, speed: number, elapsedSeconds: number) => {
+      if (!element || isPaused) {
+        return
+      }
+
+      const maxScrollLeft = element.scrollWidth - element.clientWidth
+
+      if (element.scrollLeft >= maxScrollLeft - 1) {
+        element.scrollLeft = 0
+      } else {
+        element.scrollLeft += speed * elapsedSeconds
+      }
+    }
+
+    const animateScrollers = (currentTime: number) => {
       const elapsedSeconds = (currentTime - previousTime) / 1000
       previousTime = currentTime
 
-      if (!isClientGalleryPausedRef.current) {
-        const maxScrollLeft = gallery.scrollWidth - gallery.clientWidth
+      scrollArea(reviews, isClientReviewsPausedRef.current, reviewScrollSpeed, elapsedSeconds)
+      scrollArea(gallery, isClientGalleryPausedRef.current, galleryScrollSpeed, elapsedSeconds)
 
-        if (gallery.scrollLeft >= maxScrollLeft - 1) {
-          gallery.scrollLeft = 0
-        } else {
-          gallery.scrollLeft += scrollSpeed * elapsedSeconds
-        }
-      }
-
-      frameId = requestAnimationFrame(animateGallery)
+      frameId = requestAnimationFrame(animateScrollers)
     }
 
-    frameId = requestAnimationFrame(animateGallery)
+    frameId = requestAnimationFrame(animateScrollers)
 
     return () => cancelAnimationFrame(frameId)
   }, [])
@@ -151,7 +139,6 @@ export default function Home() {
                   { href: "#collection", label: "Collection" },
                   { href: "#fabrics", label: "Fabrics" },
                   { href: withBasePath("/heritage"), label: "Heritage" },
-                  { href: "#contact", label: "Contact" },
                   { href: "#contact", label: "Book", isPrimary: true },
                 ]}
               />
@@ -172,7 +159,7 @@ export default function Home() {
             <div className="flex justify-center">
               <a href={withBasePath("/")} className="block" aria-label="Umang Vaish home">
                 <img
-                  src={withBasePath("/images/uv-logo-white.png")}
+                  src={withBasePath("/images/logo/uv-black.png")}
                   alt="Umang Vaish"
                   className="h-12 w-12 object-contain md:h-14 md:w-14"
                 />
@@ -184,9 +171,6 @@ export default function Home() {
               <nav className="hidden md:flex items-center gap-8 text-xs tracking-[0.2em] uppercase">
                 <a href={withBasePath("/heritage")} className="text-foreground hover:text-muted-foreground transition-colors">
                   Heritage
-                </a>
-                <a href="#contact" className="text-foreground hover:text-muted-foreground transition-colors">
-                  Contact
                 </a>
                 <a 
                   href="#contact" 
@@ -207,39 +191,35 @@ export default function Home() {
           {/* Hero Slides */}
           <div className="flex h-full transition-transform duration-700">
             <div className="min-w-full h-full relative">
-              <div className="absolute inset-0 bg-primary/90">
-                <img
-                  src={withBasePath("/images/hero-showroom.jpg")}
-                  alt="Umang Vaish Bespoke Tailors"
-                  className="w-full h-full object-cover opacity-60"
-                />
+              <div className="absolute inset-0">
+                <picture className="block h-full w-full">
+                  <source media="(max-width: 767px)" srcSet={withBasePath("/images/hero/hero-mobile.png")} />
+                  <img
+                    src={withBasePath("/images/hero/hero-desktop.png")}
+                    alt="Umang Vaish Bespoke Tailors"
+                    className="h-full w-full object-cover"
+                  />
+                </picture>
               </div>
               <div className="absolute inset-0 flex flex-col items-center justify-center text-primary-foreground text-center px-6">
                 <h1 className="text-5xl md:text-7xl lg:text-8xl font-light tracking-[0.15em] mb-4">UMANG VAISH</h1>
-                <p className="text-xl md:text-2xl font-light tracking-[0.2em] mb-6">Bespoke Tailors</p>
+                <p className="text-xl md:text-2xl font-light tracking-[0.2em] mb-6">BESPOKE TAILORING HOUSE</p>
                 <p className="text-sm md:text-base tracking-[0.15em] uppercase text-primary-foreground/80">From the House of D. Vaish & Sons</p>
               </div>
             </div>
           </div>
 
-          {/* Navigation Arrows */}
-          <button className="absolute left-6 top-1/2 -translate-y-1/2 w-12 h-12 flex items-center justify-center text-primary-foreground/80 hover:text-primary-foreground transition-colors">
-            <ChevronLeft className="w-8 h-8" />
-          </button>
-          <button className="absolute right-6 top-1/2 -translate-y-1/2 w-12 h-12 flex items-center justify-center text-primary-foreground/80 hover:text-primary-foreground transition-colors">
-            <ChevronRight className="w-8 h-8" />
-          </button>
-
           {/* Bottom Links */}
           <div className="absolute bottom-8 left-0 right-0">
             <div className="container mx-auto px-6 lg:px-12">
               <div className="flex items-center justify-center gap-8 text-primary-foreground">
-                <a href="#locations" className="text-xs tracking-[0.2em] uppercase hover:opacity-70 transition-opacity">
+                <a
+                  href="https://maps.app.goo.gl/EixMBhk92xL4g16Z6"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-xs tracking-[0.2em] uppercase hover:opacity-70 transition-opacity"
+                >
                   Our Locations
-                </a>
-                <span className="text-primary-foreground/40">|</span>
-                <a href="#bespoke" className="text-xs tracking-[0.2em] uppercase hover:opacity-70 transition-opacity">
-                  Discover Now
                 </a>
               </div>
             </div>
@@ -248,12 +228,12 @@ export default function Home() {
       </section>
 
       {/* Featured Collections - Horizontal Scroll */}
-      <section className="py-24 bg-background">
+      <section id="collection" className="scroll-mt-20 py-24 bg-background">
         <div className="container mx-auto px-6 lg:px-12 mb-12">
           <div className="flex items-end justify-between">
             <div>
-              <p className="text-xs tracking-[0.3em] uppercase text-muted-foreground mb-3">Collections</p>
-              <h2 className="text-4xl md:text-5xl font-light text-foreground">Featured</h2>
+              <p className="text-xs tracking-[0.3em] uppercase text-muted-foreground mb-3">Our Expertise</p>
+              <h2 className="text-4xl md:text-5xl font-light text-foreground">What We Tailor</h2>
             </div>
             <a href="#collection" className="text-xs tracking-[0.2em] uppercase text-foreground hover:text-muted-foreground transition-colors hidden md:block">
               View All
@@ -263,15 +243,16 @@ export default function Home() {
         <div className="overflow-x-auto scrollbar-hide">
           <div className="flex gap-6 px-6 lg:px-12 pb-4">
             {[
-              { title: "Suits", image: withBasePath("/images/collection-suits.jpg") },
-              { title: "Jackets", image: withBasePath("/images/collection-jackets.jpg") },
-              { title: "Outerwear", image: withBasePath("/images/collection-outerwear.png") },
-              { title: "Shirts", image: withBasePath("/images/collection-shirts.jpg") },
-              { title: "Accessories", image: withBasePath("/images/collection-accessories.jpg") },
+              { title: "Suits", image: withBasePath("/images/collections/suits.png") },
+              { title: "Nehru Jacket", image: withBasePath("/images/collections/nehru-jacket.png") },
+              { title: "Bandhgala", image: withBasePath("/images/collections/bandhgala.png") },
+              { title: "Outerwear", image: withBasePath("/images/collections/outwears.png") },
+              { title: "Shirts", image: withBasePath("/images/collections/shirts.png") },
+              { title: "Accessories", image: withBasePath("/images/collections/accessories.png") },
             ].map((item, i) => (
               <a
                 key={i}
-                href={`#${item.title.toLowerCase()}`}
+                href={`#${item.title.toLowerCase().replace(/\s+/g, "-")}`}
                 className="flex-shrink-0 w-[300px] md:w-[400px] group cursor-pointer"
               >
                 <div className="relative aspect-[3/4] bg-muted overflow-hidden mb-4">
@@ -292,7 +273,7 @@ export default function Home() {
       </section>
 
       {/* Portrait Videos Section */}
-      <section className="py-24 bg-muted/30">
+      <section id="client-experiences" className="py-24 bg-muted/30">
         <div className="container mx-auto px-6 lg:px-12 mb-12">
           <div className="flex items-end justify-between">
             <div>
@@ -304,12 +285,12 @@ export default function Home() {
         <div className="overflow-x-auto scrollbar-hide">
           <div className="flex gap-4 px-6 lg:px-12 pb-4">
             {[
-              { title: "Pattern Making", subtitle: "The Foundation", image: withBasePath("/images/craft-pattern.jpg") },
-              { title: "Hand Stitching", subtitle: "Traditional Craft", image: withBasePath("/images/craft-stitching.jpg") },
-              { title: "Canvas Work", subtitle: "The Structure", image: withBasePath("/images/craft-canvas.jpg") },
-              { title: "Fitting Session", subtitle: "Perfection", image: withBasePath("/images/craft-fitting.png") },
-              { title: "Final Details", subtitle: "The Finish", image: withBasePath("/images/craft-details.jpg") },
-              { title: "Quality Check", subtitle: "Excellence", image: withBasePath("/images/craft-quality.jpg") },
+              { title: "Pattern Making", subtitle: "The Foundation", image: withBasePath("/images/crafts/Pattern Making .png") },
+              { title: "Hand Stitching", subtitle: "Traditional Craft", image: withBasePath("/images/crafts/Hand stitching .png") },
+              { title: "Canvas Work", subtitle: "The Structure", image: withBasePath("/images/crafts/Canvas work .png") },
+              { title: "Fitting Session", subtitle: "Perfection", image: withBasePath("/images/crafts/Fitting session .png") },
+              { title: "Final Details", subtitle: "The Finish", image: withBasePath("/images/crafts/Final Details.png") },
+              { title: "Quality Check", subtitle: "Excellence", image: withBasePath("/images/crafts/Quality Check.png") },
             ].map((video, i) => (
               <div
                 key={i}
@@ -376,8 +357,15 @@ export default function Home() {
       </section>
 
       {/* Fabrics Section */}
-      <section id="fabrics" className="py-32 bg-primary text-primary-foreground">
-        <div className="container mx-auto px-6 lg:px-12">
+      <section id="fabrics" className="relative overflow-hidden py-32 bg-primary text-primary-foreground">
+        <img
+          src={withBasePath("/images/fabrics/15.jpg")}
+          alt=""
+          aria-hidden="true"
+          className="absolute inset-0 h-full w-full object-cover opacity-55"
+        />
+        <div className="absolute inset-0 bg-primary/62" />
+        <div className="container relative mx-auto px-6 lg:px-12">
           <div className="max-w-3xl mx-auto text-center mb-20">
             <p className="text-xs tracking-[0.3em] uppercase text-primary-foreground/70 mb-6">Materials</p>
             <h2 className="text-4xl md:text-6xl font-light mb-8">The Finest Fabrics</h2>
@@ -411,7 +399,7 @@ export default function Home() {
             <div>
               <div className="aspect-[4/5] bg-muted">
                 <img
-                  src={withBasePath("/images/heritage.jpg")}
+                  src={withBasePath("/images/heritage/Three generations.png")}
                   alt="Heritage"
                   className="w-full h-full object-cover"
                 />
@@ -458,128 +446,48 @@ export default function Home() {
       {/* Client Reviews Section */}
       <section className="py-24 bg-muted/30">
         <div className="container mx-auto px-6 lg:px-12">
-          <div className="flex items-end justify-between mb-12">
+          <div className="mb-12 max-w-3xl">
             <div>
               <p className="text-xs tracking-[0.3em] uppercase text-muted-foreground mb-3">In Their Words</p>
               <h2 className="text-4xl md:text-5xl font-light text-foreground">Client Experiences</h2>
             </div>
-            <div className="hidden items-center gap-3 md:flex">
-              <button
-                type="button"
-                onClick={showPreviousDesktopReviews}
-                className="flex h-11 w-11 items-center justify-center border border-border text-foreground transition-colors hover:bg-foreground hover:text-background"
-                aria-label="Show previous client reviews"
-              >
-                <ChevronLeft className="h-5 w-5" />
-              </button>
-              <button
-                type="button"
-                onClick={showNextDesktopReviews}
-                className="flex h-11 w-11 items-center justify-center border border-border text-foreground transition-colors hover:bg-foreground hover:text-background"
-                aria-label="Show next client reviews"
-              >
-                <ChevronRight className="h-5 w-5" />
-              </button>
-            </div>
           </div>
+        </div>
 
-          <div className="hidden overflow-hidden md:block">
-            <div
-              className="flex transition-transform duration-500 ease-out"
-              style={{ transform: `translateX(-${desktopReviewSlide * 100}%)` }}
-            >
-              {desktopReviewSlides.map((slide, slideIndex) => (
-                <div key={slideIndex} className="grid min-w-full grid-cols-1 gap-8 md:grid-cols-3">
-                  {slide.map((review) => (
-                    <article
-                      key={review.name}
-                      className="flex min-h-[280px] flex-col justify-between border border-border bg-background p-8"
-                    >
-                      <div>
-                        <p className="mb-6 text-5xl font-light leading-none text-muted-foreground/40">&ldquo;</p>
-                        <p className="text-lg font-light leading-relaxed text-foreground">&ldquo;{review.review}&rdquo;</p>
-                      </div>
-                      <div className="mt-10 border-t border-border pt-6">
-                        <p className="mb-2 text-xs uppercase tracking-[0.2em] text-muted-foreground">
-                          {review.occasion}
-                        </p>
-                        <p className="text-sm uppercase tracking-[0.15em] text-foreground">{review.name}</p>
-                      </div>
-                    </article>
-                  ))}
+        <div
+          ref={clientReviewsRef}
+          onMouseEnter={() => {
+            isClientReviewsPausedRef.current = true
+          }}
+          onMouseLeave={() => {
+            isClientReviewsPausedRef.current = false
+          }}
+          onTouchStart={() => {
+            isClientReviewsPausedRef.current = true
+          }}
+          onTouchEnd={() => {
+            isClientReviewsPausedRef.current = false
+          }}
+          className="overflow-x-auto scrollbar-hide"
+        >
+          <div className="flex w-max gap-6 px-6 pb-4 lg:px-12">
+            {clientReviews.map((review) => (
+              <article
+                key={review.name}
+                className="flex min-h-[320px] w-[300px] flex-shrink-0 flex-col justify-between border border-border bg-background p-8 md:w-[420px]"
+              >
+                <div>
+                  <p className="text-9xl font-light leading-none text-muted-foreground/40">&ldquo;</p>
+                  <p className="text-lg font-light leading-relaxed text-foreground">&ldquo;{review.review}&rdquo;</p>
                 </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="overflow-hidden md:hidden">
-            <div
-              className="flex transition-transform duration-500 ease-out"
-              style={{ transform: `translateX(-${mobileReviewSlide * 100}%)` }}
-            >
-              {clientReviews.map((review) => (
-                <article
-                  key={review.name}
-                  className="flex min-w-full min-h-[300px] flex-col justify-between border border-border bg-background p-8"
-                >
-                  <div>
-                    <p className="mb-6 text-5xl font-light leading-none text-muted-foreground/40">&ldquo;</p>
-                    <p className="text-lg font-light leading-relaxed text-foreground">&ldquo;{review.review}&rdquo;</p>
-                  </div>
-                  <div className="mt-10 border-t border-border pt-6">
-                    <p className="mb-2 text-xs uppercase tracking-[0.2em] text-muted-foreground">
-                      {review.occasion}
-                    </p>
-                    <p className="text-sm uppercase tracking-[0.15em] text-foreground">{review.name}</p>
-                  </div>
-                </article>
-              ))}
-            </div>
-          </div>
-
-          <div className="mt-8 flex items-center justify-between gap-6 md:justify-center">
-            <button
-              type="button"
-              onClick={showPreviousMobileReview}
-              className="flex h-11 w-11 items-center justify-center border border-border text-foreground transition-colors hover:bg-foreground hover:text-background md:hidden"
-              aria-label="Show previous client reviews"
-            >
-              <ChevronLeft className="h-5 w-5" />
-            </button>
-            <div className="hidden items-center gap-3 md:flex">
-              {desktopReviewSlides.map((_, i) => (
-                <button
-                  key={i}
-                  type="button"
-                  onClick={() => setDesktopReviewSlide(i)}
-                  className={`h-2.5 w-2.5 rounded-full transition-colors ${
-                    desktopReviewSlide === i ? "bg-foreground" : "bg-muted-foreground/30"
-                  }`}
-                  aria-label={`Show client review slide ${i + 1}`}
-                />
-              ))}
-            </div>
-            <div className="flex items-center gap-2 md:hidden">
-              {clientReviews.map((_, i) => (
-                <button
-                  key={i}
-                  type="button"
-                  onClick={() => setMobileReviewSlide(i)}
-                  className={`h-2.5 w-2.5 rounded-full transition-colors ${
-                    mobileReviewSlide === i ? "bg-foreground" : "bg-muted-foreground/30"
-                  }`}
-                  aria-label={`Show client review ${i + 1}`}
-                />
-              ))}
-            </div>
-            <button
-              type="button"
-              onClick={showNextMobileReview}
-              className="flex h-11 w-11 items-center justify-center border border-border text-foreground transition-colors hover:bg-foreground hover:text-background md:hidden"
-              aria-label="Show next client reviews"
-            >
-              <ChevronRight className="h-5 w-5" />
-            </button>
+                <div className="mt-10 border-t border-border pt-6">
+                  <p className="mb-2 text-xs uppercase tracking-[0.2em] text-muted-foreground">
+                    {review.occasion}
+                  </p>
+                  <p className="text-sm uppercase tracking-[0.15em] text-foreground">{review.name}</p>
+                </div>
+              </article>
+            ))}
           </div>
         </div>
       </section>
@@ -626,8 +534,15 @@ export default function Home() {
       </section>
 
       {/* CTA Section */}
-      <section id="contact" className="py-32 bg-secondary text-secondary-foreground">
-        <div className="container mx-auto px-6 lg:px-12 text-center">
+      <section id="contact" className="relative overflow-hidden py-32 text-secondary-foreground">
+        <img
+          src={withBasePath("/images/appointment/appointment.jpg")}
+          alt=""
+          aria-hidden="true"
+          className="absolute inset-0 h-full w-full object-cover"
+        />
+        <div className="absolute inset-0 bg-secondary/92" />
+        <div className="container relative mx-auto px-6 lg:px-12 text-center">
           <p className="text-xs tracking-[0.3em] uppercase text-secondary-foreground/70 mb-6">Begin Your Journey</p>
           <h2 className="text-4xl md:text-6xl lg:text-7xl font-light mb-8">Book an Appointment</h2>
           <p className="text-lg text-secondary-foreground/80 max-w-2xl mx-auto mb-12 leading-relaxed">
@@ -636,7 +551,7 @@ export default function Home() {
           </p>
           <a 
             href="mailto:info@umangvaishbespoke.com" 
-            className="inline-block text-xs tracking-[0.2em] uppercase text-secondary-foreground border border-secondary-foreground px-8 py-4 hover:bg-secondary-foreground hover:text-secondary transition-colors"
+            className="inline-block border border-secondary-foreground bg-secondary-foreground px-8 py-4 text-xs uppercase tracking-[0.2em] text-secondary transition-colors hover:bg-transparent hover:text-secondary-foreground"
           >
             Contact Us
           </a>
@@ -644,48 +559,174 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-foreground text-background py-20">
-        <div className="container mx-auto px-6 lg:px-12">
-          <div className="grid md:grid-cols-4 gap-12 mb-16">
-            <div>
-              <p className="text-3xl font-light tracking-[0.3em] mb-6">UV</p>
-              <p className="text-sm text-background/60 leading-relaxed">
-                Premium Bespoke Tailors<br />Since 1940
+      <footer className="border-t border-background/20 bg-foreground text-background">
+        <div className="hidden md:block">
+          <div className="container mx-auto grid grid-cols-[1.1fr_1fr_1.35fr_1.35fr] px-6 py-16 lg:px-12">
+            <div className="pr-12">
+              <img
+                src={withBasePath("/images/logo/uv-white.png")}
+                alt="Umang Vaish"
+                className="mb-8 h-20 w-20 object-contain"
+              />
+              <p className="max-w-[220px] text-base font-medium leading-8 text-background/75">
+                Bespoke tailoring that celebrates individuality, craftsmanship and timeless style.
               </p>
+              <div className="mt-8 flex items-center gap-5">
+                <a href="#" aria-label="Instagram" className="text-background/80 transition-colors hover:text-background">
+                  <Instagram className="h-7 w-7" />
+                </a>
+                <a href="#" aria-label="WhatsApp" className="text-background/80 transition-colors hover:text-background">
+                  <MessageCircle className="h-7 w-7" />
+                </a>
+              </div>
             </div>
-            <div>
-              <p className="text-xs tracking-[0.2em] uppercase mb-6">Navigation</p>
-              <nav className="flex flex-col gap-3 text-sm text-background/70">
-                <a href="#bespoke" className="hover:text-background transition-colors">Bespoke</a>
-                <a href="#collection" className="hover:text-background transition-colors">Collection</a>
-                <a href="#fabrics" className="hover:text-background transition-colors">Fabrics</a>
-                <a href={withBasePath("/heritage")} className="hover:text-background transition-colors">Heritage</a>
+
+            <div className="border-l border-background/20 px-12">
+              <p className="mb-9 text-sm font-semibold uppercase tracking-[0.28em]">Quick Links</p>
+              <nav className="flex flex-col gap-5 text-base font-medium text-background/75">
+                <a href="#bespoke" className="transition-colors hover:text-background">Bespoke</a>
+                <a href="#collection" className="transition-colors hover:text-background">The Process</a>
+                <a href={withBasePath("/heritage")} className="transition-colors hover:text-background">About</a>
+                <a href="#client-experiences" className="transition-colors hover:text-background">Testimonials</a>
+                <a href="#contact" className="transition-colors hover:text-background">Atelier</a>
               </nav>
             </div>
-            <div>
-              <p className="text-xs tracking-[0.2em] uppercase mb-6">Visit</p>
-              <p className="text-sm text-background/70 leading-relaxed">
-                Connaught Place<br />
-                New Delhi, India<br />
-                <br />
-                By Appointment Only
-              </p>
+
+            <div className="border-l border-background/20 px-12">
+              <p className="mb-9 text-sm font-semibold uppercase tracking-[0.28em]">Contact</p>
+              <div className="space-y-7 text-base font-medium text-background/75">
+                <p className="flex items-center gap-6">
+                  <Phone className="h-7 w-7 flex-shrink-0 text-background" />
+                  <span>+91 XXX XXX XXXX</span>
+                </p>
+                <p className="flex items-center gap-6">
+                  <Mail className="h-7 w-7 flex-shrink-0 text-background" />
+                  <span>info@umangvaishbespoke.com</span>
+                </p>
+                <p className="flex items-center gap-6">
+                  <MapPin className="h-7 w-7 flex-shrink-0 text-background" />
+                  <span>By Appointment Only</span>
+                </p>
+              </div>
             </div>
-            <div>
-              <p className="text-xs tracking-[0.2em] uppercase mb-6">Contact</p>
-              <p className="text-sm text-background/70 leading-relaxed">
-                +91 XXX XXX XXXX<br />
-                info@umangvaishbespoke.com
+
+            <div className="border-l border-background/20 pl-12">
+              <p className="mb-9 text-sm font-semibold uppercase tracking-[0.28em]">Stay Connected</p>
+              <p className="mb-10 max-w-[280px] text-base font-medium leading-8 text-background/75">
+                Subscribe for updates and exclusive invites.
               </p>
+              <form className="flex max-w-[360px]" action="#">
+                <input
+                  type="email"
+                  placeholder="Your email address"
+                  className="h-16 min-w-0 flex-1 border border-background/35 bg-transparent px-6 text-base text-background placeholder:text-background/60 outline-none focus:border-background"
+                  aria-label="Email address"
+                />
+                <button
+                  type="submit"
+                  className="flex h-16 w-20 items-center justify-center bg-background text-foreground transition-colors hover:bg-secondary hover:text-secondary-foreground"
+                  aria-label="Subscribe"
+                >
+                  <ArrowRight className="h-7 w-7" />
+                </button>
+              </form>
             </div>
           </div>
-          <div className="border-t border-background/20 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
-            <p className="text-xs text-background/50">
-              © {new Date().getFullYear()} Umang Vaish. All rights reserved.
-            </p>
-            <div className="flex gap-6 text-xs text-background/50">
-              <a href="#" className="hover:text-background transition-colors">Privacy</a>
-              <a href="#" className="hover:text-background transition-colors">Terms</a>
+
+          <div className="border-t border-background/20">
+            <div className="container mx-auto flex items-center justify-between px-6 py-8 text-sm font-medium text-background/75 lg:px-12">
+              <p>© {new Date().getFullYear()} Umang Vaish Bespoke. All Rights Reserved.</p>
+              <div className="flex items-center gap-8">
+                <a href="#" className="transition-colors hover:text-background">Privacy Policy</a>
+                <span className="text-background/40">|</span>
+                <a href="#" className="transition-colors hover:text-background">Terms & Conditions</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="md:hidden">
+          <div className="flex items-start justify-between gap-6 border-b border-background/20 px-6 py-8">
+            <div className="flex gap-6">
+              <img
+                src={withBasePath("/images/logo/uv-white.png")}
+                alt="Umang Vaish"
+                className="h-14 w-14 flex-shrink-0 object-contain"
+              />
+              <p className="max-w-[170px] text-sm font-medium leading-6 text-background/75">
+                Bespoke tailoring that celebrates individuality, craftsmanship and timeless style.
+              </p>
+            </div>
+            <div className="flex items-center gap-4 pt-1">
+              <a href="#" aria-label="Instagram" className="text-background/80">
+                <Instagram className="h-6 w-6" />
+              </a>
+              <a href="#" aria-label="WhatsApp" className="text-background/80">
+                <MessageCircle className="h-6 w-6" />
+              </a>
+            </div>
+          </div>
+
+          <details className="group border-b border-background/20">
+            <summary className="flex cursor-pointer list-none items-center justify-between px-6 py-5 text-sm font-semibold uppercase tracking-[0.28em]">
+              Quick Links
+              <Plus className="h-5 w-5 transition-transform group-open:rotate-45" />
+            </summary>
+            <nav className="flex flex-col gap-4 px-6 pb-6 text-sm font-medium text-background/75">
+              <a href="#bespoke">Bespoke</a>
+              <a href="#collection">The Process</a>
+              <a href={withBasePath("/heritage")}>About</a>
+              <a href="#client-experiences">Testimonials</a>
+              <a href="#contact">Atelier</a>
+            </nav>
+          </details>
+
+          <details className="group border-b border-background/20">
+            <summary className="flex cursor-pointer list-none items-center justify-between px-6 py-5 text-sm font-semibold uppercase tracking-[0.28em]">
+              Contact
+              <Plus className="h-5 w-5 transition-transform group-open:rotate-45" />
+            </summary>
+            <div className="space-y-5 px-6 pb-6 text-sm font-medium text-background/75">
+              <p className="flex items-center gap-4"><Phone className="h-5 w-5 text-background" /> +91 XXX XXX XXXX</p>
+              <p className="flex items-center gap-4"><Mail className="h-5 w-5 text-background" /> info@umangvaishbespoke.com</p>
+              <p className="flex items-center gap-4"><MapPin className="h-5 w-5 text-background" /> By Appointment Only</p>
+            </div>
+          </details>
+
+          <details className="group border-b border-background/20">
+            <summary className="flex cursor-pointer list-none items-center justify-between px-6 py-5 text-sm font-semibold uppercase tracking-[0.28em]">
+              Stay Connected
+              <Plus className="h-5 w-5 transition-transform group-open:rotate-45" />
+            </summary>
+            <div className="px-6 pb-6">
+              <p className="mb-5 text-sm font-medium leading-6 text-background/75">
+                Subscribe for updates and exclusive invites.
+              </p>
+              <form className="flex" action="#">
+                <input
+                  type="email"
+                  placeholder="Your email address"
+                  className="h-12 min-w-0 flex-1 border border-background/35 bg-transparent px-4 text-sm text-background placeholder:text-background/60 outline-none focus:border-background"
+                  aria-label="Email address"
+                />
+                <button
+                  type="submit"
+                  className="flex h-12 w-14 items-center justify-center bg-background text-foreground"
+                  aria-label="Subscribe"
+                >
+                  <ArrowRight className="h-5 w-5" />
+                </button>
+              </form>
+            </div>
+          </details>
+
+          <div className="px-6 py-6 text-center text-sm font-medium text-background/75">
+            <p>© {new Date().getFullYear()} Umang Vaish Bespoke.</p>
+            <p>All Rights Reserved.</p>
+            <div className="mt-7 flex items-center justify-center gap-5">
+              <a href="#">Privacy Policy</a>
+              <span className="text-background/40">|</span>
+              <a href="#">Terms & Conditions</a>
             </div>
           </div>
         </div>

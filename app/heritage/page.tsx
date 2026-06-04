@@ -65,7 +65,6 @@ export default function HeritagePage() {
                   { href: withBasePath("/#collection"), label: "Collection" },
                   { href: withBasePath("/#fabrics"), label: "Fabrics" },
                   { href: withBasePath("/heritage"), label: "Heritage" },
-                  { href: withBasePath("/#contact"), label: "Contact" },
                   { href: withBasePath("/#contact"), label: "Book", isPrimary: true },
                 ]}
               />
@@ -94,7 +93,7 @@ export default function HeritagePage() {
             <div className="flex justify-center">
               <a href={withBasePath("/")} className="block" aria-label="Umang Vaish home">
                 <img
-                  src={withBasePath("/images/uv-logo-white.png")}
+                  src={withBasePath("/images/logo/uv-black.png")}
                   alt="Umang Vaish"
                   className="h-12 w-12 object-contain md:h-14 md:w-14"
                 />
@@ -108,9 +107,6 @@ export default function HeritagePage() {
                   className="text-primary-foreground hover:text-primary-foreground/70 transition-colors"
                 >
                   Heritage
-                </a>
-                <a href={withBasePath("/#contact")} className="text-primary-foreground hover:text-primary-foreground/70 transition-colors">
-                  Contact
                 </a>
                 <a
                   href={withBasePath("/#contact")}
