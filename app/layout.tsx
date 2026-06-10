@@ -1,51 +1,180 @@
 import type React from "react"
 import type { Metadata } from "next"
-import localFont from "next/font/local"
 import { Analytics } from "@vercel/analytics/next"
 import { withBasePath } from "@/lib/base-path"
 import "./globals.css"
 
-const cormorantGaramond = localFont({
-  src: [
-    { path: "../public/fonts/cormorant-garamond/cormorant-garamond-300.ttf", weight: "300", style: "normal" },
-    { path: "../public/fonts/cormorant-garamond/cormorant-garamond-400.ttf", weight: "400", style: "normal" },
-    { path: "../public/fonts/cormorant-garamond/cormorant-garamond-500.ttf", weight: "500", style: "normal" },
-    { path: "../public/fonts/cormorant-garamond/cormorant-garamond-600.ttf", weight: "600", style: "normal" },
-    { path: "../public/fonts/cormorant-garamond/cormorant-garamond-700.ttf", weight: "700", style: "normal" },
-  ],
-  variable: "--font-cormorant-garamond",
-  display: "swap",
-})
+const fontUrl = (path: string) => `url("${withBasePath(path)}")`
 
-const neueHaasGrotesk = localFont({
-  src: [
-    { path: "../public/fonts/neue-haas-grotesk/NeueHaasGrotText-55Roman-Trial.otf", weight: "400", style: "normal" },
-    { path: "../public/fonts/neue-haas-grotesk/NeueHaasGrotText-56Italic-Trial.otf", weight: "400", style: "italic" },
-    { path: "../public/fonts/neue-haas-grotesk/NeueHaasGrotText-65Medium-Trial.otf", weight: "500", style: "normal" },
-    { path: "../public/fonts/neue-haas-grotesk/NeueHaasGrotText-66MediumItalic-Trial.otf", weight: "500", style: "italic" },
-    { path: "../public/fonts/neue-haas-grotesk/NeueHaasGrotText-75Bold-Trial.otf", weight: "700", style: "normal" },
-    { path: "../public/fonts/neue-haas-grotesk/NeueHaasGrotText-76BoldItalic-Trial.otf", weight: "700", style: "italic" },
-  ],
-  variable: "--font-neue-haas-grotesk",
-  display: "swap",
-})
+const fontFaceCss = `
+@font-face {
+  font-family: "Cormorant Garamond";
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: ${fontUrl("/fonts/cormorant-garamond/cormorant-garamond-300.ttf")} format("truetype");
+}
 
-const suisseInternational = localFont({
-  src: [
-    { path: "../public/fonts/suisse-international/SuisseIntlTrial-Light.otf", weight: "300", style: "normal" },
-    { path: "../public/fonts/suisse-international/SuisseIntlTrial-LightIt.otf", weight: "300", style: "italic" },
-    { path: "../public/fonts/suisse-international/SuisseIntlTrial-Regular.otf", weight: "400", style: "normal" },
-    { path: "../public/fonts/suisse-international/SuisseIntlTrial-RegularIt.otf", weight: "400", style: "italic" },
-    { path: "../public/fonts/suisse-international/SuisseIntlTrial-Medium.otf", weight: "500", style: "normal" },
-    { path: "../public/fonts/suisse-international/SuisseIntlTrial-MediumIt.otf", weight: "500", style: "italic" },
-    { path: "../public/fonts/suisse-international/SuisseIntlTrial-Semibold.otf", weight: "600", style: "normal" },
-    { path: "../public/fonts/suisse-international/SuisseIntlTrial-SemiboldIt.otf", weight: "600", style: "italic" },
-    { path: "../public/fonts/suisse-international/SuisseIntlTrial-Bold.otf", weight: "700", style: "normal" },
-    { path: "../public/fonts/suisse-international/SuisseIntlTrial-BoldIt.otf", weight: "700", style: "italic" },
-  ],
-  variable: "--font-suisse-international",
-  display: "swap",
-})
+@font-face {
+  font-family: "Cormorant Garamond";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: ${fontUrl("/fonts/cormorant-garamond/cormorant-garamond-400.ttf")} format("truetype");
+}
+
+@font-face {
+  font-family: "Cormorant Garamond";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: ${fontUrl("/fonts/cormorant-garamond/cormorant-garamond-500.ttf")} format("truetype");
+}
+
+@font-face {
+  font-family: "Cormorant Garamond";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: ${fontUrl("/fonts/cormorant-garamond/cormorant-garamond-600.ttf")} format("truetype");
+}
+
+@font-face {
+  font-family: "Cormorant Garamond";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: ${fontUrl("/fonts/cormorant-garamond/cormorant-garamond-700.ttf")} format("truetype");
+}
+
+@font-face {
+  font-family: "Neue Haas Grotesk";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: ${fontUrl("/fonts/neue-haas-grotesk/NeueHaasGrotText-55Roman-Trial.otf")} format("opentype");
+}
+
+@font-face {
+  font-family: "Neue Haas Grotesk";
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: ${fontUrl("/fonts/neue-haas-grotesk/NeueHaasGrotText-56Italic-Trial.otf")} format("opentype");
+}
+
+@font-face {
+  font-family: "Neue Haas Grotesk";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: ${fontUrl("/fonts/neue-haas-grotesk/NeueHaasGrotText-65Medium-Trial.otf")} format("opentype");
+}
+
+@font-face {
+  font-family: "Neue Haas Grotesk";
+  font-style: italic;
+  font-weight: 500;
+  font-display: swap;
+  src: ${fontUrl("/fonts/neue-haas-grotesk/NeueHaasGrotText-66MediumItalic-Trial.otf")} format("opentype");
+}
+
+@font-face {
+  font-family: "Neue Haas Grotesk";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: ${fontUrl("/fonts/neue-haas-grotesk/NeueHaasGrotText-75Bold-Trial.otf")} format("opentype");
+}
+
+@font-face {
+  font-family: "Neue Haas Grotesk";
+  font-style: italic;
+  font-weight: 700;
+  font-display: swap;
+  src: ${fontUrl("/fonts/neue-haas-grotesk/NeueHaasGrotText-76BoldItalic-Trial.otf")} format("opentype");
+}
+
+@font-face {
+  font-family: "Suisse International";
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: ${fontUrl("/fonts/suisse-international/SuisseIntlTrial-Light.otf")} format("opentype");
+}
+
+@font-face {
+  font-family: "Suisse International";
+  font-style: italic;
+  font-weight: 300;
+  font-display: swap;
+  src: ${fontUrl("/fonts/suisse-international/SuisseIntlTrial-LightIt.otf")} format("opentype");
+}
+
+@font-face {
+  font-family: "Suisse International";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: ${fontUrl("/fonts/suisse-international/SuisseIntlTrial-Regular.otf")} format("opentype");
+}
+
+@font-face {
+  font-family: "Suisse International";
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: ${fontUrl("/fonts/suisse-international/SuisseIntlTrial-RegularIt.otf")} format("opentype");
+}
+
+@font-face {
+  font-family: "Suisse International";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: ${fontUrl("/fonts/suisse-international/SuisseIntlTrial-Medium.otf")} format("opentype");
+}
+
+@font-face {
+  font-family: "Suisse International";
+  font-style: italic;
+  font-weight: 500;
+  font-display: swap;
+  src: ${fontUrl("/fonts/suisse-international/SuisseIntlTrial-MediumIt.otf")} format("opentype");
+}
+
+@font-face {
+  font-family: "Suisse International";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: ${fontUrl("/fonts/suisse-international/SuisseIntlTrial-Semibold.otf")} format("opentype");
+}
+
+@font-face {
+  font-family: "Suisse International";
+  font-style: italic;
+  font-weight: 600;
+  font-display: swap;
+  src: ${fontUrl("/fonts/suisse-international/SuisseIntlTrial-SemiboldIt.otf")} format("opentype");
+}
+
+@font-face {
+  font-family: "Suisse International";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: ${fontUrl("/fonts/suisse-international/SuisseIntlTrial-Bold.otf")} format("opentype");
+}
+
+@font-face {
+  font-family: "Suisse International";
+  font-style: italic;
+  font-weight: 700;
+  font-display: swap;
+  src: ${fontUrl("/fonts/suisse-international/SuisseIntlTrial-BoldIt.otf")} format("opentype");
+}
+`
 
 export const metadata: Metadata = {
   title: "UV | Umang Vaish Bespoke Tailoring Since 1940",
@@ -66,7 +195,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${cormorantGaramond.variable} ${neueHaasGrotesk.variable} ${suisseInternational.variable} font-sans antialiased`}>
+      <head>
+        <style dangerouslySetInnerHTML={{ __html: fontFaceCss }} />
+      </head>
+      <body className="font-sans antialiased">
         {children}
         <Analytics />
       </body>

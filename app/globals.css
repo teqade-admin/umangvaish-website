@@ -80,10 +80,10 @@
 }
 
 @theme inline {
-  --font-sans: var(--font-suisse-international);
-  --font-serif: var(--font-cormorant-garamond);
-  --font-heading: var(--font-cormorant-garamond);
-  --font-subheading: var(--font-neue-haas-grotesk);
+  --font-sans: "Suisse International", "Suisse Intl", Arial, Helvetica, sans-serif;
+  --font-serif: "Cormorant Garamond", "Coromorant Garamond", Georgia, "Times New Roman", serif;
+  --font-heading: "Cormorant Garamond", "Coromorant Garamond", Georgia, "Times New Roman", serif;
+  --font-subheading: "Neue Haas Grotesk", "Neue Haas Grotesk Display", "Helvetica Neue", Arial, sans-serif;
   --font-mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
