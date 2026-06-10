@@ -12,19 +12,17 @@ export default function Home() {
   const isClientReviewsPausedRef = useRef(false)
   const isClientGalleryPausedRef = useRef(false)
 
-  const fabricBrands = [
-    { mill: "Loro Piana", origin: "Italy" },
-    { mill: "Reda", origin: "Italy" },
-    { mill: "Marzoni", origin: "Italy" },
-    { mill: "Raymond", origin: "India" },
-    { mill: "Vitale Barberis Canonico", origin: "Italy" },
-    { mill: "Soktas", origin: "Turkey" },
-    { mill: "Tessitura Monti", origin: "Italy" },
-    { mill: "Ariston Napoli", origin: "Italy" },
-    { mill: "Porter & Harding", origin: "Scotland" },
-    { mill: "W. Bill", origin: "England" },
-    { mill: "Linen Club", origin: "India" },
-    { mill: "Dugdale Bros & Co", origin: "England" },
+  const fabricGallery = [
+    { name: "Loro Piana", country: "Italy", image: withBasePath("/images/fabrics/Fabric1.png") },
+    { name: "Reda", country: "Italy", image: withBasePath("/images/fabrics/Fabric2.png") },
+    { name: "Marzoni", country: "Italy", image: withBasePath("/images/fabrics/Fabric3.png") },
+    { name: "Raymond", country: "India", image: withBasePath("/images/fabrics/Fabric4.png") },
+    { name: "Tessitura Monti", country: "Italy", image: withBasePath("/images/fabrics/Fabric5.png") },
+    { name: "Soktas", country: "Turkey", image: withBasePath("/images/fabrics/Fabric6.png") },
+    { name: "Vitale Barberis Canonico", country: "Italy", image: withBasePath("/images/fabrics/Fabric7.png") },
+    { name: "Ariston Napoli", country: "Italy", image: withBasePath("/images/fabrics/Fabric8.png") },
+    { name: "Porter & Harding", country: "Scotland", image: withBasePath("/images/fabrics/Fabric9.png") },
+    { name: "W. Bill", country: "England", image: withBasePath("/images/fabrics/Fabric10.png") },
   ]
 
   const clientReviews = [
@@ -370,22 +368,39 @@ export default function Home() {
             <p className="text-xs tracking-[0.3em] uppercase text-primary-foreground/70 mb-6">Materials</p>
             <h2 className="text-4xl md:text-6xl font-light mb-8">The Finest Fabrics</h2>
             <p className="text-lg text-primary-foreground/80 leading-relaxed">
-              We source exclusively from the world's most prestigious mills. 
-              Each fabric is selected for its quality, character, and longevity.
+              Every garment begins with exceptional cloth. Chosen for drape, character and longevity, our fabrics
+              come from some of the world’s most respected mills.
             </p>
           </div>
 
-          <div className="flex flex-wrap justify-center gap-3 md:gap-4">
-            {fabricBrands.map((fabric, i) => (
-              <div
-                key={i}
-                className="inline-flex min-h-12 items-center gap-2 rounded-full border border-primary-foreground/25 bg-primary-foreground/8 px-4 py-2.5 backdrop-blur-sm md:min-h-14 md:px-5"
-              >
-                <p className="text-xs font-medium leading-none text-primary-foreground md:text-sm">{fabric.mill}</p>
-                <span className="text-primary-foreground/35">•</span>
-                <p className="text-[9px] uppercase tracking-[0.16em] text-primary-foreground/65 md:text-[10px] md:tracking-[0.2em]">
-                  {fabric.origin}
-                </p>
+        </div>
+      </section>
+
+      {/* Fabric Gallery Section */}
+      <section className="py-24 bg-background">
+        <div className="container mx-auto px-6 lg:px-12">
+          <div className="mb-12 max-w-3xl">
+            <p className="text-xs tracking-[0.3em] uppercase text-muted-foreground mb-3">Fabric Gallery</p>
+            <h2 className="text-4xl md:text-5xl font-light text-foreground">Fabric Collection</h2>
+          </div>
+
+          <div className="grid grid-cols-2 gap-4 md:grid-cols-5 md:gap-5">
+            {fabricGallery.map((fabric, i) => (
+              <div key={i} className="group relative aspect-[3/4] overflow-hidden rounded-md bg-muted">
+                <img
+                  src={fabric.image}
+                  alt={fabric.name}
+                  className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                />
+                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/75 via-black/25 to-transparent" />
+                <div className="absolute inset-x-0 bottom-0 p-3 md:p-4">
+                  <p className="max-w-[calc(100%-1rem)] text-[10px] font-medium leading-tight text-primary-foreground md:max-w-none md:text-sm">
+                    {fabric.name}
+                  </p>
+                  <p className="mt-1 text-[9px] uppercase tracking-[0.18em] text-primary-foreground/70 md:text-[10px]">
+                    {fabric.country}
+                  </p>
+                </div>
               </div>
             ))}
           </div>
@@ -524,7 +539,7 @@ export default function Home() {
                   <img
                     src={image}
                     alt={`Client testimonial ${i + 1}`}
-                    className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    className="h-full w-full scale-[1.04] object-cover object-[50%_30%] transition-transform duration-700 group-hover:scale-[1.08]"
                   />
                 </div>
               </article>

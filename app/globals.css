@@ -1,46 +1,6 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
-@font-face {
-  font-family: "Cormorant Garamond";
-  font-style: normal;
-  font-weight: 300;
-  font-display: swap;
-  src: url("/fonts/cormorant-garamond/cormorant-garamond-300.ttf") format("truetype");
-}
-
-@font-face {
-  font-family: "Cormorant Garamond";
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url("/fonts/cormorant-garamond/cormorant-garamond-400.ttf") format("truetype");
-}
-
-@font-face {
-  font-family: "Cormorant Garamond";
-  font-style: normal;
-  font-weight: 500;
-  font-display: swap;
-  src: url("/fonts/cormorant-garamond/cormorant-garamond-500.ttf") format("truetype");
-}
-
-@font-face {
-  font-family: "Cormorant Garamond";
-  font-style: normal;
-  font-weight: 600;
-  font-display: swap;
-  src: url("/fonts/cormorant-garamond/cormorant-garamond-600.ttf") format("truetype");
-}
-
-@font-face {
-  font-family: "Cormorant Garamond";
-  font-style: normal;
-  font-weight: 700;
-  font-display: swap;
-  src: url("/fonts/cormorant-garamond/cormorant-garamond-700.ttf") format("truetype");
-}
-
 @custom-variant dark (&:is(.dark *));
 
 :root {
@@ -120,10 +80,10 @@
 }
 
 @theme inline {
-  --font-sans: "Suisse International", "Suisse Intl", Arial, Helvetica, sans-serif;
-  --font-serif: "Cormorant Garamond", "Coromorant Garamond", Georgia, "Times New Roman", serif;
-  --font-heading: "Cormorant Garamond", "Coromorant Garamond", Georgia, "Times New Roman", serif;
-  --font-subheading: "Neue Haas Grotesk", "Neue Haas Grotesk Display", "Helvetica Neue", Arial, sans-serif;
+  --font-sans: var(--font-suisse-international);
+  --font-serif: var(--font-cormorant-garamond);
+  --font-heading: var(--font-cormorant-garamond);
+  --font-subheading: var(--font-neue-haas-grotesk);
   --font-mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
